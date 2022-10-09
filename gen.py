@@ -21,22 +21,14 @@ model.eval()
 
 visualizer = Visualizer(opt)
 
-# create a webpage that summarizes the all results
-print(opt.results_dir)
-print(opt.name)
-print(opt.phase)
-print(opt.which_epoch)
+#create a webpage that summarizes the all results
 web_dir = os.path.join(opt.results_dir, opt.name,
                        '%s_%s' % (opt.phase, opt.which_epoch))
-while os.path.exists(web_dir):
-    web_dir += '_1'
-
-print(web_dir)
 webpage = html.HTML(web_dir,
                     'Experiment = %s, Phase = %s, Epoch = %s' %
                     (opt.name, opt.phase, opt.which_epoch))
 
-# test
+
 for i, data_i in enumerate(dataloader):
     if i * opt.batchSize >= opt.how_many:
         break

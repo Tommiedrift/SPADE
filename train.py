@@ -22,7 +22,6 @@ dataloader = data.create_dataloader(opt)
 
 # create trainer for our model
 trainer = Pix2PixTrainer(opt)
-
 # create tool for counting iterations
 iter_counter = IterationCounter(opt, len(dataloader))
 
@@ -32,6 +31,7 @@ visualizer = Visualizer(opt)
 for epoch in iter_counter.training_epochs():
     iter_counter.record_epoch_start(epoch)
     for i, data_i in enumerate(dataloader, start=iter_counter.epoch_iter):
+        #print(i)
         iter_counter.record_one_iteration()
 
         # Training

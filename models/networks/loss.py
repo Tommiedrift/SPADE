@@ -52,7 +52,7 @@ class GANLoss(nn.Module):
         if self.zero_tensor is None:
             self.zero_tensor = self.Tensor(1).fill_(0)
             self.zero_tensor.requires_grad_(False)
-        return self.zero_tensor.expand_as(input)
+        return self.zero_tensor.expand_as(input).cuda()
 
     def loss(self, input, target_is_real, for_discriminator=True):
         if self.gan_mode == 'original':  # cross entropy loss

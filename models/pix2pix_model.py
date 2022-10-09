@@ -114,11 +114,11 @@ class Pix2PixModel(torch.nn.Module):
             data['image'] = data['image'].cuda()
 
         # create one-hot label map
-        label_map = data['label']
+        label_map = data['label'].cuda()
         bs, _, h, w = label_map.size()
         nc = self.opt.label_nc + 1 if self.opt.contain_dontcare_label \
             else self.opt.label_nc
-        input_label = self.FloatTensor(bs, nc, h, w).zero_()
+        input_label = self.FloatTensor(bs, nc, h, w).zero_().cuda()
         input_semantics = input_label.scatter_(1, label_map, 1.0)
 
         # concatenate instance map if it exists
@@ -146,13 +146,13 @@ class Pix2PixModel(torch.nn.Module):
 
         if not self.opt.no_ganFeat_loss:
             num_D = len(pred_fake)
-            GAN_Feat_loss = self.FloatTensor(1).fill_(0)
+            GAN_Feat_loss = self.FloatTensor(1).fill_(0).cuda()
             for i in range(num_D):  # for each discriminator
                 # last output is the final prediction, so we exclude it
                 num_intermediate_outputs = len(pred_fake[i]) - 1
                 for j in range(num_intermediate_outputs):  # for each layer output
                     unweighted_loss = self.criterionFeat(
-                        pred_fake[i][j], pred_real[i][j].detach())
+                        pred_fake[i][j], pred_real[i][j].detach()).cuda()
                     GAN_Feat_loss += unweighted_loss * self.opt.lambda_feat / num_D
             G_losses['GAN_Feat'] = GAN_Feat_loss
 
@@ -248,4 +248,4 @@ class Pix2PixModel(torch.nn.Module):
         return eps.mul(std) + mu
 
     def use_gpu(self):
-        return len(self.opt.gpu_ids) > 0
+        return len(self.opt.gpu_ids) > 01.0
